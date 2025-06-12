@@ -18,7 +18,7 @@ class UserProfile(AbstractUser):
         validators=[
             MinValueValidator(1500000000),  
             MaxValueValidator(1999999999)
-        ], unique=True, default=0000000000
+        ], unique=True, null=True, blank=True
     )
     ACCOUNT_TYPE_CHOICES = [
         ('patient', 'Patient'),
