@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Dashboard - Hospital Management System{% endblock %}
+
+{% block sidebar %}
+<div class="col-md-3 sidebar">
+    <div class="list-group">
+        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+            <i class="fas fa-user me-2"></i>Profile
+        </a>
+        <a href="#appointments" class="list-group-item list-group-item-action" data-bs-toggle="list">
+            <i class="fas fa-calendar-check me-2"></i>Appointments
+        </a>
+        <a href="#medical-history" class="list-group-item list-group-item-action" data-bs-toggle="list">
+            <i class="fas fa-notes-medical me-2"></i>Medical History
+        </a>
+        <a href="#billing" class="list-group-item list-group-item-action" data-bs-toggle="list">
+            <i class="fas fa-file-invoice-dollar me-2"></i>Billing
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="tab-content">
+    <!-- Profile Section -->
+    <div class="tab-pane fade show active" id="profile">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Profile Information</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+                    <i class="fas fa-edit me-2"></i>Update Profile
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> {{ user.get_full_name }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Contact:</strong> {{ user.contact_no }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Address:</strong> {{ user.address }}</p>
+                        <p><strong>Date of Birth:</strong> {{ user.date_of_birth }}</p>
+                        <p><strong>Gender:</strong> {{ user.get_gender_display }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments Section -->
+    <div class="tab-pane fade" id="appointments">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>My Appointments</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookAppointmentModal">
+                    <i class="fas fa-plus me-2"></i>Book Appointment
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Doctor</th>
+                                <th>Status</th>
+                                <th>Problem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>Dr. {{ appointment.doctor.user_profile.get_full_name }}</td>
+                                <td>
+                                    <span class="badge {% if appointment.status == 'confirmed' %}bg-success{% elif appointment.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ appointment.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ appointment.problem }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No appointments found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical History Section -->
+    <div class="tab-pane fade" id="medical-history">
+        <div class="card">
+            <div class="card-header">
+                <h4>Medical History</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Medical Conditions</h5>
+                    <p>{{ medical_history|default:"No medical history recorded" }}</p>
+                </div>
+                <div>
+                    <h5>Prescribed Medications</h5>
+                    <p>{{ prescribed_medications|default:"No medications prescribed" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Billing Section -->
+    <div class="tab-pane fade" id="billing">
+        <div class="card">
+            <div class="card-header">
+                <h4>Billing Information</h4>
+            </div>
+            <div class="card-body">
+                {% if paymentStatus %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>Total Amount</th>
+                            <td>${{ paymentStatus.total_amount }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <span class="badge {% if paymentStatus.status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                    {{ paymentStatus.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td>{{ paymentStatus.get_payment_method_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <td>{{ paymentStatus.date }}</td>
+                        </tr>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center">No billing information available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Profile Modal -->
+<div class="modal fade" id="updateProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'update_profile' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="2" required>{{ user.address }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="mail" name="mail" value="{{ user.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="con" class="form-label">Contact Number</label>
+                        <input type="tel" class="form-control" id="con" name="con" value="{{ user.contact_no }}" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Appointment Modal -->
+<div class="modal fade" id="bookAppointmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="bookAppointmentForm" action="#">
+                    {% csrf_token %}
+                    <input type="hidden" name="patient" value="{{ user.patientprofile.id }}">
+                    <div class="mb-3">
+                        <label for="doctor_select" class="form-label">Select Doctor</label>
+                        <select class="form-select" id="doctor_select" name="doctor" required>
+                            <option value="">Choose a Doctor</option>
+                            {% for doc in doctors %}
+                                <option value="{{ doc.id }}">Dr. {{ doc.user_profile.get_full_name }} ({{ doc.specialization }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please select a doctor.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="time" name="time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="problem" class="form-label">Problem Description</label>
+                        <textarea class="form-control" id="problem" name="problem" rows="3" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Form validation
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+
+    // Dynamically set form action for appointment booking and validate doctor selection
+    var bookAppointmentForm = document.getElementById('bookAppointmentForm');
+    var doctorSelect = document.getElementById('doctor_select');
+
+    bookAppointmentForm.addEventListener('submit', function(event) {
+        var doctorId = doctorSelect.value;
+
+        if (!doctorId) {
+            event.preventDefault();
+            event.stopPropagation();
+            doctorSelect.setCustomValidity('Please select a doctor.');
+            bookAppointmentForm.classList.add('was-validated');
+        } else {
+            doctorSelect.setCustomValidity('');
+            bookAppointmentForm.action = '/appointment_view/' + doctorId + '/';
+        }
+    });
+
+    doctorSelect.addEventListener('change', function() {
+        // Clear custom validity message when a doctor is selected
+        this.setCustomValidity('');
+    });
+</script>
+{% endblock %} 

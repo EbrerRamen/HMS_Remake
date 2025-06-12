@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctor Dashboard - Hospital Management System{% endblock %}
+
+{% block sidebar %}
+<div class="col-md-3 sidebar">
+    <div class="list-group">
+        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+            <i class="fas fa-user me-2"></i>Profile
+        </a>
+        <a href="#appointments" class="list-group-item list-group-item-action" data-bs-toggle="list">
+            <i class="fas fa-calendar-check me-2"></i>Appointments
+        </a>
+        <a href="#patients" class="list-group-item list-group-item-action" data-bs-toggle="list">
+            <i class="fas fa-procedures me-2"></i>Patients
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="tab-content">
+    <!-- Profile Section -->
+    <div class="tab-pane fade show active" id="profile">
+        <div class="card">
+            <div class="card-header">
+                <h4>Doctor Profile</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> Dr. {{ user.get_full_name }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Contact:</strong> {{ user.contact_no }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Department:</strong> {{ doctor.department.get_name_display }}</p>
+                        <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+                        <p><strong>Qualifications:</strong> {{ doctor.qualifications }}</p>
+                        <p><strong>Shift:</strong> {{ doctor.shift.get_type_display }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments Section -->
+    <div class="tab-pane fade" id="appointments">
+        <div class="card">
+            <div class="card-header">
+                <h4>Appointments</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Problem</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>{{ appointment.patient.user_profile.get_full_name }}</td>
+                                <td>{{ appointment.problem }}</td>
+                                <td>
+                                    <span class="badge {% if appointment.status == 'confirmed' %}bg-success{% elif appointment.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ appointment.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if appointment.status == 'Scheduled' or appointment.status == 'pending' %}
+                                    <div class="btn-group">
+                                        <a href="{% url 'accept_appointment' appointment.id %}" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                        <a href="{% url 'reject_appointment' appointment.id %}" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No appointments found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patients Section -->
+    <div class="tab-pane fade" id="patients">
+        <div class="card">
+            <div class="card-header">
+                <h4>My Patients</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Last Appointment</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient_data in patients_data %}
+                            <tr>
+                                <td>{{ patient_data.patient_obj.user_profile.get_full_name }}</td>
+                                <td>{{ patient_data.patient_obj.user_profile.contact_no }}</td>
+                                <td>
+                                    {% if patient_data.last_appointment %}
+                                    {{ patient_data.last_appointment.date }} at {{ patient_data.last_appointment.time }}
+                                    {% else %}
+                                    No appointments yet
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if patient_data.last_appointment %}
+                                    <span class="badge {% if patient_data.last_appointment.status == 'completed' %}bg-success{% elif patient_data.last_appointment.status == 'cancelled' %}bg-danger{% else %}bg-warning{% endif %}">
+                                        {{ patient_data.last_appointment.get_status_display }}
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">No Status</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No patients found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Form validation
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %} 

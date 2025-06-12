@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctor Signup{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Doctor Signup for {{ user_profile.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="mb-3">
+            <label for="specialization" class="form-label">Specialization</label>
+            <input type="text" class="form-control" id="specialization" name="specialization" required>
+        </div>
+        <div class="mb-3">
+            <label for="degree" class="form-label">Qualifications/Degree</label>
+            <textarea class="form-control" id="degree" name="degree" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Complete Doctor Signup</button>
+        <a href="{% url 'cancel_signup' user_profile.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

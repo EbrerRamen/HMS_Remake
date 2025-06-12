@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Signup{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Patient Signup for {{ user_profile.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="medical_history" class="form-label">Medical History</label>
+            <textarea class="form-control" id="medical_history" name="medical_history" rows="5" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="prescriptions" class="form-label">Prescribed Medications</label>
+            <textarea class="form-control" id="prescriptions" name="prescriptions" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Complete Patient Signup</button>
+        <a href="{% url 'cancel_signup' user_profile.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

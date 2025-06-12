@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Doctor - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Update Doctor</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Username and Email -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_username" class="form-label">Username</label>
+                                {{ form.username }}
+                                <div class="invalid-feedback">Please choose a username.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_email" class="form-label">Email</label>
+                                {{ form.email }}
+                                <div class="invalid-feedback">Please provide a valid email.</div>
+                            </div>
+                        </div>
+
+                        <!-- First Name and Last Name -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                {{ form.first_name }}
+                                <div class="invalid-feedback">Please provide a first name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                {{ form.last_name }}
+                                <div class="invalid-feedback">Please provide a last name.</div>
+                            </div>
+                        </div>
+
+                        <!-- Gender and Date of Birth -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_gender" class="form-label">Gender</label>
+                                {{ form.gender }}
+                                <div class="invalid-feedback">Please select a gender.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_date_of_birth" class="form-label">Date of Birth</label>
+                                {{ form.date_of_birth }}
+                                <div class="invalid-feedback">Please provide your date of birth.</div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Number and Address -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_contact_no" class="form-label">Contact Number</label>
+                                {{ form.contact_no }}
+                                <div class="invalid-feedback">Please provide a valid 10-digit contact number.</div>
+                                <small class="form-text text-muted">Enter a 10-digit number starting with 15-19</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_address" class="form-label">Address</label>
+                                {{ form.address }}
+                                <div class="invalid-feedback">Please provide an address.</div>
+                            </div>
+                        </div>
+
+                        <!-- Department and Shift -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_department" class="form-label">Department</label>
+                                {{ form.department }}
+                                <div class="invalid-feedback">Please select a department.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_shift" class="form-label">Shift</label>
+                                {{ form.shift }}
+                                <div class="invalid-feedback">Please select a shift.</div>
+                            </div>
+                        </div>
+
+                        <!-- Specialization and Qualifications -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_specialization" class="form-label">Specialization</label>
+                                {{ form.specialization }}
+                                <div class="invalid-feedback">Please provide specialization.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_qualifications" class="form-label">Qualifications</label>
+                                {{ form.qualifications }}
+                                <div class="invalid-feedback">Please provide qualifications.</div>
+                            </div>
+                        </div>
+
+                        <!-- Password Fields (only for create, not for update unless explicit password change is needed) -->
+                        <!-- You might want to handle password updates separately or not include them in the general update form -->
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'view_doctors' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Doctors
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Doctor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Contact number validation
+    document.getElementById('id_contact_no').addEventListener('input', function() {
+        if (!this.value.match(/^[0-9]{10}$/)) {
+            this.setCustomValidity('Please enter a valid 10-digit number');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    // Populate initial values for select fields (gender, department, shift)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gender
+        var genderSelect = document.getElementById('id_gender');
+        if (genderSelect && '{{ form.gender.value }}') {
+            genderSelect.value = '{{ form.gender.value }}';
+        }
+
+        // Department
+        var departmentSelect = document.getElementById('id_department');
+        if (departmentSelect && '{{ form.department.value }}') {
+            departmentSelect.value = '{{ form.department.value }}';
+        }
+
+        // Shift
+        var shiftSelect = document.getElementById('id_shift');
+        if (shiftSelect && '{{ form.shift.value }}') {
+            shiftSelect.value = '{{ form.shift.value }}';
+        }
+    });
+
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Hero Section -->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-bold mb-3">Welcome to Our Hospital</h1>
+            <p class="lead mb-4">Providing quality healthcare services with compassion and excellence.</p>
+            {% if not user.is_authenticated %}
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-4 gap-3">Sign Up Now</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Get Started</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-user-md fa-3x mb-3 text-primary"></i>
+                    <h5 class="card-title">Doctors</h5>
+                    <p class="card-text display-6">{{ approved_doctors_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-procedures fa-3x mb-3 text-success"></i>
+                    <h5 class="card-title">Patients</h5>
+                    <p class="card-text display-6">{{ patients_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-bed fa-3x mb-3 text-info"></i>
+                    <h5 class="card-title">Available Beds</h5>
+                    <p class="card-text display-6">{{ total_beds }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-hospital fa-3x mb-3 text-warning"></i>
+                    <h5 class="card-title">Departments</h5>
+                    <p class="card-text display-6">{{ departments|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Departments Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-12 text-center">
+            <h2 class="mb-4">Our Departments</h2>
+        </div>
+        {% for department in departments %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ department.name }}</h5>
+                    <p class="card-text">{{ department.description }}</p>
+                    <p class="card-text"><small class="text-muted">Head: {{ department.head_doctor }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="lead">No departments available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Why Choose Us Section -->
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Why Choose Us?</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-user-shield fa-3x mb-3 text-primary"></i>
+                    <h5 class="card-title">Expert Doctors</h5>
+                    <p class="card-text">Our team consists of highly qualified and experienced medical professionals.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-clock fa-3x mb-3 text-success"></i>
+                    <h5 class="card-title">24/7 Service</h5>
+                    <p class="card-text">Round-the-clock medical care and emergency services available.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-heartbeat fa-3x mb-3 text-danger"></i>
+                    <h5 class="card-title">Quality Care</h5>
+                    <p class="card-text">State-of-the-art facilities and personalized patient care.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    {% if not user.is_authenticated %}
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+            <div class="p-5 bg-light rounded-3 shadow">
+                <h2 class="mb-3">Need Medical Assistance?</h2>
+                <p class="lead mb-4">Sign up or log in to book an appointment with our expert doctors.</p>
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Book an Appointment</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function get_item(dictionary, key) {
+        return dictionary[key];
+    }
+</script>
+{% endblock %} 

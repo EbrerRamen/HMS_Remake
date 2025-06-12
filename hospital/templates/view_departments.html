@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}View Departments - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Departments</h2>
+        <a href="{% url 'create_department' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add Department
+        </a>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card shadow">
+        <div class="card-body">
+            {% if departments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Department Name</th>
+                            <th>Description</th>
+                            <th>Head Doctor</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for department in departments %}
+                        <tr>
+                            <td>{{ department.get_name_display }}</td>
+                            <td>{{ department.description }}</td>
+                            <td>
+                                {% if department.head_doctor %}
+                                    {{ department.head_doctor.user_profile.get_full_name }}
+                                {% else %}
+                                    <span class="text-muted">Not assigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'edit_department' department.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </a>
+                                    <a href="{% url 'delete_department' department.id %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-hospital-alt fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Departments Found</h4>
+                <p class="text-muted">Start by adding a new department.</p>
+                <a href="{% url 'create_department' %}" class="btn btn-primary mt-3">
+                    <i class="fas fa-plus me-2"></i>Add Department
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

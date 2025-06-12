@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}View Doctors - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Doctors</h2>
+        <a href="{% url 'create_doctor' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Doctor
+        </a>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <label for="search_query" class="form-label">Search</label>
+                    <input type="text" class="form-control" id="search_query" name="search_query" 
+                           placeholder="Search by username..." value="{{ form.search_query.value|default:'' }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="department" class="form-label">Department</label>
+                    <select class="form-select" id="department" name="department">
+                        <option value="">All Departments</option>
+                        {% for dept in form.fields.department.queryset %}
+                            <option value="{{ dept.id }}" {% if form.department.value == dept.id %}selected{% endif %}>
+                                {{ dept.get_name_display }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Doctors Table -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {% if all_doctors %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Department</th>
+                                <th>Specialization</th>
+                                <th>Qualifications</th>
+                                <th>Shift</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doctor in all_doctors %}
+                                <tr>
+                                    <td>{{ doctor.user_profile.username }}</td>
+                                    <td>{{ doctor.user_profile.full_name }}</td>
+                                    <td>{{ doctor.department.get_name_display }}</td>
+                                    <td>{{ doctor.specialization }}</td>
+                                    <td>{{ doctor.qualifications }}</td>
+                                    <td>{{ doctor.shift.get_type_display }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'edit_doctor' doctor.user_profile.id %}" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'delete_doctor' doctor.user_profile.id %}" 
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No doctors found</h5>
+                    <p class="text-muted">Try adjusting your search or filter criteria</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

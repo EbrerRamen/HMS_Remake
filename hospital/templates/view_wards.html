@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}View Wards{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">View Wards</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="row g-3 mb-4 align-items-center">
+        <div class="col-md-4">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="col-md-4">
+            {{ form.ward_type.label_tag }}
+            {{ form.ward_type }}
+        </div>
+        <div class="col-md-auto mt-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{% url 'view_wards' %}" class="btn btn-secondary ms-2">Clear</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Ward Name</th>
+                    <th>Ward Type</th>
+                    <th>Capacity</th>
+                    <th>Occupancy</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ward in wards %}
+                <tr>
+                    <td>{{ ward.name }}</td>
+                    <td>{{ ward.get_ward_type_display }}</td>
+                    <td>{{ ward.capacity }}</td>
+                    <td>{{ ward.occupancy }}</td>
+                    <td>
+                        <a href="{% url 'edit_ward' ward.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_ward' ward.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No wards found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

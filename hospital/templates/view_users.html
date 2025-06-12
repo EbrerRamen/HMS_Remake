@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}View Users - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h3 class="card-title mb-0">Users</h3>
+            <a href="{% url 'create_user' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add New User
+            </a>
+        </div>
+        <div class="card-body">
+            <!-- Search and Filter Form -->
+            <form method="get" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" name="search_query" class="form-control" placeholder="Search by username" value="{{ request.GET.search_query }}">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="gender" class="form-select">
+                            <option value="">All Genders</option>
+                            <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>Male</option>
+                            <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>Female</option>
+                            <option value="O" {% if request.GET.gender == 'O' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="account_type" class="form-select">
+                            <option value="">All Account Types</option>
+                            <option value="patient" {% if request.GET.account_type == 'patient' %}selected{% endif %}>Patient</option>
+                            <option value="doctor" {% if request.GET.account_type == 'doctor' %}selected{% endif %}>Doctor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Users Table -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Account Type</th>
+                            <th>Contact Number</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if all_users %}
+                            {% for user in all_users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.get_full_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.get_gender_display }}</td>
+                                <td>
+                                    <span class="badge {% if user.account_type == 'doctor' %}bg-primary{% else %}bg-success{% endif %}">
+                                        {{ user.get_account_type_display }}
+                                    </span>
+                                </td>
+                                <td>{{ user.contact_no }}</td>
+                                <td>
+                                    {% if user.is_approved %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url 'edit_user' user.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'delete_user' user.id %}" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-users fa-3x mb-3"></i>
+                                        <p class="mb-0">No users found</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
