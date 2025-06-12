@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">View Wards</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>View Wards</h2>
+        <a href="{% url 'create_ward' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Create New Ward
+        </a>
+    </div>
 
     <!-- Filter Form -->
     <form method="get" class="row g-3 mb-4 align-items-center">

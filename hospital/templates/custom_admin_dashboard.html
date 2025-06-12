@@ -3,165 +3,159 @@
 {% block title %}Admin Dashboard - Hospital Management System{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 mx-auto">
-            <!-- Welcome Section -->
-            <div class="row justify-content-center mb-4">
-                <div class="col-12 text-center">
-                    <h2 class="mb-3">Welcome,</h2>
-                    <p class="lead">Hospital Management System Admin Dashboard</p>
+<!-- Welcome Section -->
+<div class="row justify-content-center mb-4">
+    <div class="col-12 text-center">
+        <h2 class="mb-3">Welcome,</h2>
+        <p class="lead">Hospital Management System Admin Dashboard</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row justify-content-center mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Total Doctors</h6>
+                        <h2 class="mb-0">{{ total_doctors }}</h2>
+                    </div>
+                    <i class="fas fa-user-md fa-2x"></i>
                 </div>
             </div>
-
-            <!-- Statistics Cards -->
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-primary text-white h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="card-title">Total Doctors</h6>
-                                    <h2 class="mb-0">{{ total_doctors }}</h2>
-                                </div>
-                                <i class="fas fa-user-md fa-2x"></i>
-                            </div>
-                        </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Total Patients</h6>
+                        <h2 class="mb-0">{{ total_patients }}</h2>
                     </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-success text-white h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="card-title">Total Patients</h6>
-                                    <h2 class="mb-0">{{ total_patients }}</h2>
-                                </div>
-                                <i class="fas fa-procedures fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-info text-white h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="card-title">Admitted Patients</h6>
-                                    <h2 class="mb-0">{{ total_admitted_patients }}</h2>
-                                </div>
-                                <i class="fas fa-hospital-user fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card bg-warning text-white h-100">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="card-title">Pending Requests</h6>
-                                    <h2 class="mb-0">{{ pending_doctor_requests }}</h2>
-                                </div>
-                                <i class="fas fa-clock fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <i class="fas fa-procedures fa-2x"></i>
                 </div>
             </div>
-
-            <!-- Management Sections -->
-            <div class="row justify-content-center">
-                <!-- Left Column -->
-                <div class="col-md-6">
-                    <!-- User Management -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-white">
-                            <h5 class="card-title mb-0">User Management</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="{% url 'view_users' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-users me-2"></i>View All Users
-                                </a>
-                                <a href="{% url 'create_user' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user-plus me-2"></i>Create New User
-                                </a>
-                                <a href="{% url 'doctor_nurse_requests' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user-check me-2"></i>Doctor Approval Requests
-                                </a>
-                            </div>
-                        </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Admitted Patients</h6>
+                        <h2 class="mb-0">{{ total_admitted_patients }}</h2>
                     </div>
-
-                    <!-- Patient Management -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-white">
-                            <h5 class="card-title mb-0">Patient Management</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="{% url 'view_patients' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-procedures me-2"></i>View All Patients
-                                </a>
-                                <a href="{% url 'create_patient' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user-plus me-2"></i>Add New Patient
-                                </a>
-                                <a href="{% url 'create_admission' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-bed me-2"></i>Admit New Patient
-                                </a>
-                                <a href="{% url 'view_admissions' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-hospital-user me-2"></i>Manage Admissions
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <i class="fas fa-hospital-user fa-2x"></i>
                 </div>
-
-                <!-- Right Column -->
-                <div class="col-md-6">
-                    <!-- Doctor Management -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-white">
-                            <h5 class="card-title mb-0">Doctor Management</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="{% url 'view_doctors' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user-md me-2"></i>View All Doctors
-                                </a>
-                                <a href="{% url 'create_doctor' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-user-plus me-2"></i>Add New Doctor
-                                </a>
-                                <a href="{% url 'view_departments' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-hospital me-2"></i>Manage Departments
-                                </a>
-                            </div>
-                        </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Pending Requests</h6>
+                        <h2 class="mb-0">{{ pending_doctor_requests }}</h2>
                     </div>
+                    <i class="fas fa-clock fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <!-- Facility Management -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-white">
-                            <h5 class="card-title mb-0">Facility Management</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="{% url 'view_wards' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-bed me-2"></i>Manage Wards
-                                </a>
-                                <a href="{% url 'view_beds' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-procedures me-2"></i>Manage Beds
-                                </a>
-                                <a href="{% url 'view_shifts' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-clock me-2"></i>Manage Shifts
-                                </a>
-                                <a href="{% url 'view_billings' %}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-file-invoice-dollar me-2"></i>Manage Billings
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+<!-- Management Sections -->
+<div class="row justify-content-center">
+    <!-- Left Column -->
+    <div class="col-md-6">
+        <!-- User Management -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">User Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'view_users' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>View All Users
+                    </a>
+                    <a href="{% url 'create_user' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-plus me-2"></i>Create New User
+                    </a>
+                    <a href="{% url 'doctor_nurse_requests' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-check me-2"></i>Doctor Approval Requests
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Management -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Patient Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'view_patients' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-procedures me-2"></i>View All Patients
+                    </a>
+                    <a href="{% url 'create_patient' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-plus me-2"></i>Add New Patient
+                    </a>
+                    <a href="{% url 'create_admission' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-bed me-2"></i>Admit New Patient
+                    </a>
+                    <a href="{% url 'view_admissions' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-hospital-user me-2"></i>Manage Admissions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-6">
+        <!-- Doctor Management -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Doctor Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'view_doctors' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-md me-2"></i>View All Doctors
+                    </a>
+                    <a href="{% url 'create_doctor' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-plus me-2"></i>Add New Doctor
+                    </a>
+                    <a href="{% url 'view_departments' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-hospital me-2"></i>Manage Departments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facility Management -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Facility Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{% url 'view_wards' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-bed me-2"></i>Manage Wards
+                    </a>
+                    <a href="{% url 'view_beds' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-procedures me-2"></i>Manage Beds
+                    </a>
+                    <a href="{% url 'view_shifts' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-clock me-2"></i>Manage Shifts
+                    </a>
+                    <a href="{% url 'view_billings' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-invoice-dollar me-2"></i>Manage Billings
+                    </a>
                 </div>
             </div>
         </div>

@@ -95,4 +95,5 @@ urlpatterns = [
     path('appointments/', views.appointment_list, name='appointment_list'),
     path('appointments/accept/<int:appointment_id>/', views.accept_appointment, name='accept_appointment'),
     path('appointment/reject/<int:appointment_id>/', views.reject_appointment, name='reject_appointment'),
+
 ]   

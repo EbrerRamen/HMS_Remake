@@ -748,7 +748,8 @@ def create_bed(request):
     else:
         form = BedForm()
     
-    return render(request, 'create_bed.html', {'form': form})
+    wards = Ward.objects.all().order_by('name')
+    return render(request, 'create_bed.html', {'form': form, 'wards': wards})
 
 def update_bed(request, bed_id):
     bed = get_object_or_404(Bed, pk=bed_id)
@@ -761,7 +762,8 @@ def update_bed(request, bed_id):
     else:
         form = BedForm(instance=bed)
     
-    return render(request, 'update_bed.html', {'form': form})
+    wards = Ward.objects.all().order_by('name')
+    return render(request, 'update_bed.html', {'form': form, 'wards': wards, 'bed': bed})
 
 def delete_bed(request, bed_id):
     bed = get_object_or_404(Bed, pk=bed_id)

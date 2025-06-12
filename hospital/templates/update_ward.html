@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Update Ward</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label">Ward Name (Single Letter A-Z)</label>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="1" pattern="[A-Z]" value="{{ ward.name }}" required>
+                    <small class="text-muted">Enter a single letter from A to Z</small>
+                </div>
+                <div class="mb-3">
+                    <label for="ward_type" class="form-label">Ward Type</label>
+                    <select class="form-select" id="ward_type" name="ward_type" required>
+                        <option value="">Select Ward Type</option>
+                        <option value="general" {% if ward.ward_type == 'general' %}selected{% endif %}>General Ward</option>
+                        <option value="specialized" {% if ward.ward_type == 'specialized' %}selected{% endif %}>Specialized Ward</option>
+                        <option value="isolation" {% if ward.ward_type == 'isolation' %}selected{% endif %}>Isolation Ward</option>
+                        <option value="hdu" {% if ward.ward_type == 'hdu' %}selected{% endif %}>High Dependency Unit (HDU)</option>
+                        <option value="private" {% if ward.ward_type == 'private' %}selected{% endif %}>Private Ward</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Ward</button>
+                <a href="{% url 'view_wards' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -177,7 +177,18 @@ class BillingForm(forms.ModelForm):
         fields = ['patient', 'total_amount', 'date', 'status', 'payment_method']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'patient': forms.Select(attrs={'class': 'form-select'}),
+            'total_amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'payment_method': forms.Select(attrs={'class': 'form-select'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filter patients to show only those with active admissions
+        admitted_patients = PatientProfile.objects.filter(admission__isnull=False)
+        self.fields['patient'].queryset = admitted_patients
+        self.fields['patient'].label_from_instance = lambda obj: f"{obj.user_profile.get_full_name()} (Admitted)"
 
 class DoctorForm(forms.ModelForm):
     username = forms.CharField(max_length=150, required=True)

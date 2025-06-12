@@ -9,32 +9,48 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .navbar-brand {
+        /* Scope custom styles to non-admin pages */
+        body:not(.admin-interface) .navbar-brand {
             font-weight: bold;
         }
-        .sidebar {
+        body:not(.admin-interface) .sidebar {
             min-height: calc(100vh - 56px);
             background-color: #f8f9fa;
             padding: 20px;
         }
-        .content {
+        body:not(.admin-interface) .content {
             padding: 20px;
         }
-        .card {
+        body:not(.admin-interface) .card {
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .card-header {
+        body:not(.admin-interface) .card-header {
             background-color: #f8f9fa;
             font-weight: bold;
+        }
+        /* Center content for all pages */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container-fluid {
+            padding: 0;
+        }
+        .row {
+            margin: 0;
+        }
+        .col-md-9, .col-md-12 {
+            padding: 0;
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% if request.path|slice:':6' == '/admin/' %}admin-interface{% endif %}">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">HMS</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -76,7 +92,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             {% if user.is_authenticated %}
                 {% block sidebar %}{% endblock %}

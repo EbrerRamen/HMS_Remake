@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Create New Ward</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label">Ward Name (Single Letter A-Z)</label>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="1" pattern="[A-Z]" required>
+                    <small class="text-muted">Enter a single letter from A to Z</small>
+                </div>
+                <div class="mb-3">
+                    <label for="ward_type" class="form-label">Ward Type</label>
+                    <select class="form-select" id="ward_type" name="ward_type" required>
+                        <option value="">Select Ward Type</option>
+                        <option value="general">General Ward</option>
+                        <option value="specialized">Specialized Ward</option>
+                        <option value="isolation">Isolation Ward</option>
+                        <option value="hdu">High Dependency Unit (HDU)</option>
+                        <option value="private">Private Ward</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Ward</button>
+                <a href="{% url 'view_wards' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

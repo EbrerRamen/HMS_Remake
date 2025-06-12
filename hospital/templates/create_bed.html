@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Create New Bed</h2>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="ward" class="form-label">Ward</label>
+                    <select class="form-select" id="ward" name="ward" required>
+                        <option value="">Select Ward</option>
+                        {% for ward in wards %}
+                            <option value="{{ ward.id }}">{{ ward.name }} ({{ ward.get_ward_type_display }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="bed_number" class="form-label">Bed Number</label>
+                    <input type="number" class="form-control" id="bed_number" name="bed_number" min="1" required>
+                    <small class="text-muted">Enter a unique bed number for the selected ward</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Bed</button>
+                <a href="{% url 'view_beds' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

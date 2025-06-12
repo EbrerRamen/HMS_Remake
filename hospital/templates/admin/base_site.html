@@ -1,0 +1,167 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Center the admin content */
+    #container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 20px !important;
+    }
+
+    /* Improve header styling */
+    #header {
+        background: #417690 !important;
+        color: #fff !important;
+        padding: 15px 40px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* Improve content area */
+    #content {
+        padding: 20px !important;
+        background: #fff !important;
+        border-radius: 4px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Improve table styling */
+    #changelist table {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Improve form styling */
+    .form-row {
+        padding: 10px 0 !important;
+    }
+
+    /* Improve button styling */
+    .button, input[type=submit], input[type=button], .submit-row input {
+        background: #417690 !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 10px 15px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: #2b5070 !important;
+    }
+
+    /* Improve breadcrumbs */
+    .breadcrumbs {
+        background: #f8f9fa !important;
+        padding: 10px 20px !important;
+        margin-bottom: 20px !important;
+        border-radius: 4px !important;
+    }
+
+    /* Improve module styling */
+    .module {
+        margin-bottom: 20px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+    }
+
+    .module h2 {
+        background: #f8f9fa !important;
+        padding: 10px 15px !important;
+        margin: 0 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    /* Improve login form */
+    .login {
+        max-width: 400px !important;
+        margin: 100px auto !important;
+        padding: 20px !important;
+        background: #fff !important;
+        border-radius: 4px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Improve form fields */
+    .form-row input, .form-row select, .form-row textarea {
+        width: 100% !important;
+        padding: 8px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+    }
+
+    /* Improve messages */
+    .messagelist {
+        margin: 0 0 20px 0 !important;
+        padding: 0 !important;
+    }
+
+    .messagelist li {
+        padding: 10px 15px !important;
+        margin-bottom: 10px !important;
+        border-radius: 4px !important;
+    }
+
+    /* Improve pagination */
+    .paginator {
+        margin: 20px 0 !important;
+        text-align: center !important;
+    }
+
+    .paginator a {
+        padding: 5px 10px !important;
+        margin: 0 2px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 3px !important;
+        text-decoration: none !important;
+    }
+
+    .paginator a:hover {
+        background: #f8f9fa !important;
+    }
+
+    /* Improve filter sidebar */
+    #changelist-filter {
+        background: #f8f9fa !important;
+        border-radius: 4px !important;
+        padding: 15px !important;
+    }
+
+    #changelist-filter h2 {
+        background: #417690 !important;
+        color: #fff !important;
+        padding: 10px !important;
+        margin: -15px -15px 15px -15px !important;
+        border-radius: 4px 4px 0 0 !important;
+    }
+
+    /* Improve object tools */
+    .object-tools {
+        margin: 0 0 20px 0 !important;
+    }
+
+    .object-tools a {
+        background: #417690 !important;
+        color: #fff !important;
+        padding: 8px 15px !important;
+        border-radius: 4px !important;
+        text-decoration: none !important;
+    }
+
+    .object-tools a:hover {
+        background: #2b5070 !important;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %} 

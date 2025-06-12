@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Admission{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Update Admission</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_patient" class="form-label">Patient</label>
+                                {{ form.patient }}
+                                <div class="invalid-feedback">
+                                    Please select a patient.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_bed" class="form-label">Bed</label>
+                                {{ form.bed }}
+                                <div class="invalid-feedback">
+                                    Please select a bed.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="id_admission_datetime" class="form-label">Admission Date/Time</label>
+                                {{ form.admission_datetime }}
+                                <div class="invalid-feedback">
+                                    Please provide a valid admission date and time.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'view_admissions' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Admissions
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Admission
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
+{% endblock %} 
